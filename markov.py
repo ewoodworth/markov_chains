@@ -1,5 +1,6 @@
 from random import choice
 
+input_path = "green-eggs.txt"
 
 def open_and_read_file(file_path):
     """Takes file path as string; returns text as string.
@@ -64,24 +65,23 @@ def make_text(chains):
 
     text = ""
 
-    # your code goes here
+    text_string = open_and_read_file(input_path)
+
+    full_text_stripped = text_string.replace("\n", " ")
+
+    words = full_text_stripped.split(" ")
+
+    first_link = choice(words)
+
+    #iterate through words to find key options to then choose randomly from
 
     return text
 
 
-input_path = "green-eggs.txt"
-
 processed_file = open_and_read_file(input_path)
 
-make_chains(processed_file)
+chains = make_chains(processed_file)
 
-# # Open the file and turn it into one long string
-# input_text = open_and_read_file(input_path)
+random_text = make_text(chains)
 
-# # Get a Markov chain
-# chains = make_chains(input_text)
-
-# # Produce random text
-# random_text = make_text(chains)
-
-# print random_text
+print random_text
