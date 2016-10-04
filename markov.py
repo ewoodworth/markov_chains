@@ -10,9 +10,8 @@ def open_and_read_file(file_path):
 
     tex_file = open(file_path)
     full_text = tex_file.read()
-    full_text_stripped = full_text.rstrip()
 
-    return full_text_stripped
+    return full_text
 
 
 def make_chains(text_string):
@@ -30,13 +29,33 @@ def make_chains(text_string):
 
     chains = {}
 
-    words = text_string.split(" ")
+    full_text_stripped = text_string.replace("\n", " ")
+
+    words = full_text_stripped.split(" ")
     
-    for i in range(len(words)):
-        if words[i] == words[-1]:
-            print words[i]
-        else:
-            print words[i], words[i + 1]
+    for i in range(len(words)- 2):
+        # if words[i] == words[-1]:
+        #     chains[(words[i])] = ""
+        # else:
+        key_tuple = (words[i], words[i + 1])
+        chains[key_tuple] = ""
+
+    # for key in chains:
+    #     if key == "":
+    #         del chains[key]
+    #         break
+
+    for key in chains:
+        values = []
+        for i in range(len(words)):
+            if words[i] == words[-1] or words[i] == words [-2] or (words[i]) == key:
+                continue
+            elif (words[i], words[i + 1]) == key:
+                values.append(words[i + 2])
+            else: 
+                continue
+            chains[key] = values
+    print chains
 
     return chains
 
