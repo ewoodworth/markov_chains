@@ -55,7 +55,6 @@ def make_chains(text_string):
             else: 
                 continue
             chains[key] = values
-    print chains
 
     return chains
 
