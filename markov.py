@@ -1,8 +1,9 @@
+#-*- coding: utf-8 -*-
+
 from random import choice
+import codecs
 
-input_path = "prufrock.txt"
-
-TEXT = ""
+input_path = "green-eggs.txt"
 
 def open_and_read_file(file_path):
     """Takes file path as string; returns text as string.
@@ -10,6 +11,7 @@ def open_and_read_file(file_path):
     the file's contents as one string of text.
     """
 
+    # tex_file = codecs.open(file_path, encoding='utf-8')
     tex_file = open(file_path)
     full_text = tex_file.read()
 
@@ -17,7 +19,7 @@ def open_and_read_file(file_path):
 
 
 def make_chains(text_string):
-    """Takes input text as string; returns _dictionary_ of markov chains.
+    """Takes input text as string; returns _dictiencoding='utf-8'onary_ of markov chains.
     A chain will be a key that consists of a tuple of (word1, word2)
     and the value would be a list of the word(s) that follow those two
     words in the input text.
@@ -46,9 +48,6 @@ def make_chains(text_string):
             else: 
                 continue
             chains[key] = values
-
-    import pprint
-    pprint.pprint(chains)
 
     return chains
 
@@ -80,29 +79,31 @@ def build_tuple(chains):
 
 
 
-def lookup(chains, key_tuple, TEXT):
-    try:
-        options = chains[key_tuple]
-    except KeyError:
-        print TEXT
-        return
-    value_choice = choice(options)
-    new_tuple = (key_tuple[1], value_choice)
-    to_print = str(new_tuple[0])
-    TEXT = TEXT + " " + to_print
-    if new_tuple[1] == "":
-        print TEXT
-        return
-    else:
-        lookup(chains, new_tuple, TEXT)
+def lookup(chains, key_tuple):
+    text = key_tuple[0]
+    while True:   
+        try:
+            options = chains[key_tuple]
+        except KeyError:
+            text = text + " " + key_tuple[1]
+            break
+        value_choice = choice(options)
+        key_tuple = (key_tuple[1], value_choice)
+        to_print = str(key_tuple[0])
+        text = text + " " + to_print
+    return text
 
 processed_file = open_and_read_file(input_path)
 
 chains = make_chains(processed_file)
 
+# getting a random tuple to start out
 tuple_lookup = build_tuple(chains)
 
-if lookup(chains, tuple_lookup, TEXT) == " ":
-    lookup(chains, tuple_lookup, TEXT)
+
+final_text = lookup(chains, tuple_lookup)
+
+if final_text == " ":
+    print lookup(chains, tuple_lookup)
 else:
-    lookup(chains, tuple_lookup, TEXT)
+    print final_text
