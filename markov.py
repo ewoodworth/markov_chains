@@ -1,12 +1,11 @@
 from random import choice
 
-input_path = "green-eggs.txt"
+input_path = "prufrock.txt"
 
 TEXT = ""
 
 def open_and_read_file(file_path):
     """Takes file path as string; returns text as string.
-
     Takes a string that is a file path, opens the file, and turns
     the file's contents as one string of text.
     """
@@ -19,20 +18,19 @@ def open_and_read_file(file_path):
 
 def make_chains(text_string):
     """Takes input text as string; returns _dictionary_ of markov chains.
-
     A chain will be a key that consists of a tuple of (word1, word2)
     and the value would be a list of the word(s) that follow those two
     words in the input text.
-
     For example:
-
         >>> make_chains("hi there mary hi there juanita")
         {('hi', 'there'): ['mary', 'juanita'], ('there', 'mary'): ['hi'], ('mary', 'hi': ['there']}
     """
 
     chains = {}
 
-    words = text_string.strip()
+    # full_text = text_string.replace("\n", "")
+    words = text_string.split()
+
     
     for i in range(len(words)- 2):
         key_tuple = (words[i], words[i + 1])
@@ -48,6 +46,9 @@ def make_chains(text_string):
             else: 
                 continue
             chains[key] = values
+
+    import pprint
+    pprint.pprint(chains)
 
     return chains
 
@@ -83,7 +84,6 @@ def lookup(chains, key_tuple, TEXT):
     try:
         options = chains[key_tuple]
     except KeyError:
-        TEXT = TEXT.replace("?", "?\n")
         print TEXT
         return
     value_choice = choice(options)
@@ -91,8 +91,8 @@ def lookup(chains, key_tuple, TEXT):
     to_print = str(new_tuple[0])
     TEXT = TEXT + " " + to_print
     if new_tuple[1] == "":
-        TEXT = TEXT.replace("?", "?\n")
         print TEXT
+        return
     else:
         lookup(chains, new_tuple, TEXT)
 
@@ -106,5 +106,3 @@ if lookup(chains, tuple_lookup, TEXT) == " ":
     lookup(chains, tuple_lookup, TEXT)
 else:
     lookup(chains, tuple_lookup, TEXT)
-
-
