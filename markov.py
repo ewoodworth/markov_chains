@@ -30,21 +30,12 @@ def make_chains(text_string):
 
     chains = {}
 
-    full_text_stripped = text_string.replace("\n", " ")
-
-    words = full_text_stripped.split(" ")
+    full_text = text_string.replace("\n", " ")
+    words = full_text.split(" ")
     
     for i in range(len(words)- 2):
-        # if words[i] == words[-1]:
-        #     chains[(words[i])] = ""
-        # else:
         key_tuple = (words[i], words[i + 1])
         chains[key_tuple] = ""
-
-    # for key in chains:
-    #     if key == "":
-    #         del chains[key]
-    #         break
 
     for key in chains:
         values = []
@@ -73,8 +64,39 @@ def make_text(chains):
 
     first_link = choice(words)
 
-    #iterate through words to find key options to then choose randomly from
+    second_link_possibilities = []
 
+    for i in range(len(words) - 1):
+        if words[i] == first_link:
+            second_link_possibilities.append(words[i + 1])
+
+    if second_link_possibilities == []:
+        return
+    else:
+        second_link = choice(second_link_possibilities)
+        build_make_text(chains, words, first_link, second_link)
+
+def build_make_text(chains, words, first_link, second_link):
+    text = ""
+
+    text = text + " " + first_link + " " + second_link
+
+    second_link_possibilities = []
+
+    for i in range(len(words) - 1):
+        if words[i] == second_link:
+            second_link_possibilities.append(words[i + 1])
+
+    if second_link_possibilities == []:
+        return
+    else:
+        second_link2 = choice(second_link_possibilities)
+        build_make_text(chains, words, second_link, second_link2)
+
+
+    print text
+
+ 
     return text
 
 
@@ -83,5 +105,3 @@ processed_file = open_and_read_file(input_path)
 chains = make_chains(processed_file)
 
 random_text = make_text(chains)
-
-print random_text
