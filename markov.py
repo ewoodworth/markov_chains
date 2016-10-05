@@ -32,8 +32,7 @@ def make_chains(text_string):
 
     chains = {}
 
-    full_text = text_string.replace("\n", " ")
-    words = full_text.split(" ")
+    words = text_string.strip()
     
     for i in range(len(words)- 2):
         key_tuple = (words[i], words[i + 1])
@@ -84,6 +83,7 @@ def lookup(chains, key_tuple, TEXT):
     try:
         options = chains[key_tuple]
     except KeyError:
+        TEXT = TEXT.replace("?", "?\n")
         print TEXT
         return
     value_choice = choice(options)
@@ -91,6 +91,7 @@ def lookup(chains, key_tuple, TEXT):
     to_print = str(new_tuple[0])
     TEXT = TEXT + " " + to_print
     if new_tuple[1] == "":
+        TEXT = TEXT.replace("?", "?\n")
         print TEXT
     else:
         lookup(chains, new_tuple, TEXT)
@@ -105,3 +106,5 @@ if lookup(chains, tuple_lookup, TEXT) == " ":
     lookup(chains, tuple_lookup, TEXT)
 else:
     lookup(chains, tuple_lookup, TEXT)
+
+
