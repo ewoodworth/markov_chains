@@ -2,6 +2,8 @@ from random import choice
 
 input_path = "green-eggs.txt"
 
+TEXT = ""
+
 def open_and_read_file(file_path):
     """Takes file path as string; returns text as string.
 
@@ -51,10 +53,8 @@ def make_chains(text_string):
     return chains
 
 
-def make_text(chains):
-    """Takes dictionary of markov chains; returns random text."""
-
-    text = ""
+def build_tuple(chains):
+    """ """
 
     text_string = open_and_read_file(input_path)
 
@@ -74,34 +74,34 @@ def make_text(chains):
         return
     else:
         second_link = choice(second_link_possibilities)
-        build_make_text(chains, words, first_link, second_link)
 
-def build_make_text(chains, words, first_link, second_link):
-    text = ""
+    key_tuple = (first_link, second_link)
+    return key_tuple
 
-    text = text + " " + first_link + " " + second_link
 
-    second_link_possibilities = []
 
-    for i in range(len(words) - 1):
-        if words[i] == second_link:
-            second_link_possibilities.append(words[i + 1])
-
-    if second_link_possibilities == []:
+def lookup(chains, key_tuple, TEXT):
+    try:
+        options = chains[key_tuple]
+    except KeyError:
+        print TEXT
         return
+    value_choice = choice(options)
+    new_tuple = (key_tuple[1], value_choice)
+    to_print = str(new_tuple[0])
+    TEXT = TEXT + " " + to_print
+    if new_tuple[1] == "":
+        print TEXT
     else:
-        second_link2 = choice(second_link_possibilities)
-        build_make_text(chains, words, second_link, second_link2)
-
-
-    print text
-
- 
-    return text
-
+        lookup(chains, new_tuple, TEXT)
 
 processed_file = open_and_read_file(input_path)
 
 chains = make_chains(processed_file)
 
-random_text = make_text(chains)
+tuple_lookup = build_tuple(chains)
+
+if lookup(chains, tuple_lookup, TEXT) == " ":
+    lookup(chains, tuple_lookup, TEXT)
+else:
+    lookup(chains, tuple_lookup, TEXT)
